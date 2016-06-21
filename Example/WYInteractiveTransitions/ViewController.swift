@@ -31,6 +31,8 @@ class ViewController: UIViewController {
                     type = WYTransitoinType.Zoom
                 case "Swing":
                     type = WYTransitoinType.Swing
+                case "ScaleAndRotate":
+                    type = WYTransitoinType.ScaleAndRotate
                 default: break
                 }
                 WYTransitionMgr.configureTransition(toView, type: type)

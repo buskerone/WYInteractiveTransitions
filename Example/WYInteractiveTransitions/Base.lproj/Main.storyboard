@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -28,7 +28,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eRH-QM-MSz">
-                                <rect key="frame" x="285" y="355" width="30" height="30"/>
+                                <rect key="frame" x="285" y="345" width="30" height="30"/>
                                 <state key="normal" title="Up">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -37,8 +37,8 @@
                                     <action selector="trigerTransition:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="CbE-IE-s4W"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qXZ-Zt-ZN7">
-                                <rect key="frame" x="278" y="495" width="43" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qXZ-Zt-ZN7">
+                                <rect key="frame" x="279" y="465" width="42" height="30"/>
                                 <state key="normal" title="Swing">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -48,7 +48,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oL6-B4-mVu">
-                                <rect key="frame" x="280" y="425" width="40" height="30"/>
+                                <rect key="frame" x="280" y="405" width="40" height="30"/>
                                 <state key="normal" title="Zoom">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -57,17 +57,29 @@
                                     <action selector="trigerTransition:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="owa-UK-Gnb"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xQw-xj-b8n">
+                                <rect key="frame" x="245" y="525" width="110" height="30"/>
+                                <state key="normal" title="ScaleAndRotate">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="trigerTransition:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="MaN-nD-uvL"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="qXZ-Zt-ZN7" firstAttribute="top" secondItem="oL6-B4-mVu" secondAttribute="bottom" constant="40" id="5Qz-7e-Mo0"/>
+                            <constraint firstItem="qXZ-Zt-ZN7" firstAttribute="top" secondItem="oL6-B4-mVu" secondAttribute="bottom" constant="30" id="5Qz-7e-Mo0"/>
                             <constraint firstAttribute="centerX" secondItem="MoL-6i-HIP" secondAttribute="centerX" id="Ben-AY-6Hm"/>
                             <constraint firstAttribute="centerX" secondItem="oL6-B4-mVu" secondAttribute="centerX" id="E37-BF-Xg2"/>
                             <constraint firstAttribute="centerY" secondItem="MoL-6i-HIP" secondAttribute="centerY" id="N2o-ZF-aNS"/>
-                            <constraint firstItem="oL6-B4-mVu" firstAttribute="top" secondItem="eRH-QM-MSz" secondAttribute="bottom" constant="40" id="U7A-w2-Nrn"/>
+                            <constraint firstItem="xQw-xj-b8n" firstAttribute="centerX" secondItem="kh9-bI-dsS" secondAttribute="centerX" id="P2O-5o-RnW"/>
+                            <constraint firstItem="oL6-B4-mVu" firstAttribute="top" secondItem="eRH-QM-MSz" secondAttribute="bottom" constant="30" id="U7A-w2-Nrn"/>
                             <constraint firstAttribute="centerX" secondItem="eRH-QM-MSz" secondAttribute="centerX" id="hgO-hv-qgI"/>
                             <constraint firstAttribute="centerX" secondItem="qXZ-Zt-ZN7" secondAttribute="centerX" id="mm4-vp-lzg"/>
-                            <constraint firstItem="eRH-QM-MSz" firstAttribute="top" secondItem="MoL-6i-HIP" secondAttribute="bottom" constant="40" id="yTv-pQ-wRQ"/>
+                            <constraint firstItem="xQw-xj-b8n" firstAttribute="top" secondItem="qXZ-Zt-ZN7" secondAttribute="bottom" constant="30" id="qAb-hq-U6y"/>
+                            <constraint firstItem="eRH-QM-MSz" firstAttribute="top" secondItem="MoL-6i-HIP" secondAttribute="bottom" constant="30" id="yTv-pQ-wRQ"/>
                         </constraints>
                     </view>
                     <connections>
