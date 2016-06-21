@@ -13,6 +13,7 @@ public enum WYTransitoinType {
     case Zoom
     case Up
     case Swing
+    case ScaleAndRotate
 }
 
 public class WYInteractiveTransitions: UIPercentDrivenInteractiveTransition, UIViewControllerAnimatedTransitioning, UIViewControllerTransitioningDelegate {
@@ -170,6 +171,48 @@ public class WYInteractiveTransitions: UIPercentDrivenInteractiveTransition, UIV
                 }, completion: { finished in
                     completeTransition()
             })
+            
+        case WYTransitoinType.ScaleAndRotate:
+            if presenting {
+                toView.frame = container.bounds
+                toView.transform = CGAffineTransformMakeScale(0.01, 0.01)
+                container.addSubview(fromView)
+                container.addSubview(toView)
+                
+                UIView.animateWithDuration(duration, animations: {
+                    toView.transform = CGAffineTransformMakeRotation(1/3 * CGFloat(M_PI*2))
+                    toView.transform = CGAffineTransformMakeRotation(2/3 * CGFloat(M_PI*2))
+                    toView.transform = CGAffineTransformMakeRotation(3/3 * CGFloat(M_PI*2))
+                    toView.transform = CGAffineTransformMakeScale(1, 1)
+                    
+                    fromView.transform = CGAffineTransformIdentity
+                    
+                    }, completion: { (finished) in
+                        completeTransition()
+                })
+            }
+            else {
+                let transform = toView.transform
+                toView.transform = CGAffineTransformIdentity
+                toView.frame = container.bounds
+                toView.transform = transform
+                
+                container.addSubview(toView)
+                container.addSubview(fromView)
+                
+                UIView.animateWithDuration(duration, animations: {
+                    fromView.transform = CGAffineTransformMakeRotation(-1/3 * CGFloat(M_PI*2))
+                    fromView.transform = CGAffineTransformMakeRotation(-2/3 * CGFloat(M_PI*2))
+                    fromView.transform = CGAffineTransformMakeRotation(-3/3 * CGFloat(M_PI*2))
+                    fromView.transform = CGAffineTransformMakeScale(0.01, 0.01)
+                    
+                    toView.transform = CGAffineTransformIdentity
+                    
+                    }, completion: { (finished) in
+                        completeTransition()
+                        fromView.removeFromSuperview()
+                })
+            }
         }
     }
     
