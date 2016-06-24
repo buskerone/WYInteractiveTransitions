@@ -67,6 +67,26 @@
                                     <action selector="trigerTransition:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="MaN-nD-uvL"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pIa-ps-Ovh">
+                                <rect key="frame" x="258" y="225" width="85" height="30"/>
+                                <state key="normal" title="HalfRotation">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="trigerTransition:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="IhH-je-9al"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bfg-M7-kyq">
+                                <rect key="frame" x="265.5" y="165" width="70" height="30"/>
+                                <state key="normal" title="NewZoom">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="trigerTransition:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="n1N-uC-CpY"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -75,10 +95,14 @@
                             <constraint firstAttribute="centerX" secondItem="oL6-B4-mVu" secondAttribute="centerX" id="E37-BF-Xg2"/>
                             <constraint firstAttribute="centerY" secondItem="MoL-6i-HIP" secondAttribute="centerY" id="N2o-ZF-aNS"/>
                             <constraint firstItem="xQw-xj-b8n" firstAttribute="centerX" secondItem="kh9-bI-dsS" secondAttribute="centerX" id="P2O-5o-RnW"/>
+                            <constraint firstItem="pIa-ps-Ovh" firstAttribute="centerX" secondItem="kh9-bI-dsS" secondAttribute="centerX" id="Smm-jG-nlI"/>
                             <constraint firstItem="oL6-B4-mVu" firstAttribute="top" secondItem="eRH-QM-MSz" secondAttribute="bottom" constant="30" id="U7A-w2-Nrn"/>
+                            <constraint firstItem="bfg-M7-kyq" firstAttribute="centerX" secondItem="kh9-bI-dsS" secondAttribute="centerX" id="UhB-6s-9rp"/>
                             <constraint firstAttribute="centerX" secondItem="eRH-QM-MSz" secondAttribute="centerX" id="hgO-hv-qgI"/>
+                            <constraint firstItem="pIa-ps-Ovh" firstAttribute="top" secondItem="bfg-M7-kyq" secondAttribute="bottom" constant="30" id="mDG-eU-Z8S"/>
                             <constraint firstAttribute="centerX" secondItem="qXZ-Zt-ZN7" secondAttribute="centerX" id="mm4-vp-lzg"/>
                             <constraint firstItem="xQw-xj-b8n" firstAttribute="top" secondItem="qXZ-Zt-ZN7" secondAttribute="bottom" constant="30" id="qAb-hq-U6y"/>
+                            <constraint firstItem="MoL-6i-HIP" firstAttribute="top" secondItem="pIa-ps-Ovh" secondAttribute="bottom" constant="30" id="vj7-Li-Zp5"/>
                             <constraint firstItem="eRH-QM-MSz" firstAttribute="top" secondItem="MoL-6i-HIP" secondAttribute="bottom" constant="30" id="yTv-pQ-wRQ"/>
                         </constraints>
                     </view>

@@ -14,12 +14,14 @@ public enum WYTransitoinType {
     case Up
     case Swing
     case ScaleAndRotate
+    case HalfRotation
+    case NewZoom
 }
 
 public class WYInteractiveTransitions: UIPercentDrivenInteractiveTransition, UIViewControllerAnimatedTransitioning, UIViewControllerTransitioningDelegate {
     
     
-    public func configureTransition(duration duration: NSTimeInterval?=nil, toView toViewController: UIViewController, panEnable handGestureEnable: Bool?=true, type transitionType: WYTransitoinType) {
+    public func configureTransition(toViewController: UIViewController, panEnable handGestureEnable: Bool?=true, type transitionType: WYTransitoinType, duration: NSTimeInterval?=nil) {
         if let duration = duration {
             self.durationTransition = duration
         } else { self.durationTransition = 0.5 }
@@ -28,8 +30,7 @@ public class WYInteractiveTransitions: UIPercentDrivenInteractiveTransition, UIV
         self.toViewController?.transitioningDelegate = self
         self.toViewController?.modalPresentationStyle = .FullScreen
         if handGestureEnable == true {
-            let panEdgeGesture = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(WYInteractiveTransitions.screenEdgePanGestureHandler(_:)))
-            panEdgeGesture.edges = UIRectEdge.Left
+            let panEdgeGesture = UIPanGestureRecognizer(target: self, action: #selector(WYInteractiveTransitions.handlePanGesture(_:)))
             toViewController.view.addGestureRecognizer(panEdgeGesture)
         }
     }
@@ -41,22 +42,27 @@ public class WYInteractiveTransitions: UIPercentDrivenInteractiveTransition, UIV
     private var toViewController: UIViewController?
     var durationTransition = 0.5
     
-    func screenEdgePanGestureHandler(gesture: UIScreenEdgePanGestureRecognizer) {
+    private func clip(x: CGFloat) -> CGFloat { if x < 0 { return 0 } else { return x } }
+    
+    var initialTouchPoint = CGPointZero
+    func handlePanGesture(gesture: UIPanGestureRecognizer) {
         if let toView = toViewController {
-            let location: CGPoint = gesture.translationInView(toView.view)
-            let velocity = gesture.velocityInView(toView.view).x
+            //            let translation: CGPoint = gesture.translationInView(toView.view)
+            let location = gesture.locationInView(toView.view)
+            let velocity = gesture.velocityInView(toView.view)
             
             switch gesture.state {
             case .Began:
                 self.handIn = true
                 toView.modalPresentationStyle = UIModalPresentationStyle.Custom
                 toView.dismissViewControllerAnimated(true, completion: nil)
+                initialTouchPoint = location
             case .Changed:
-                let animationRatio: CGFloat = location.x / toView.view.bounds.width
+                let animationRatio: CGFloat = (clip(location.x - initialTouchPoint.x)) / (toView.view.bounds.width)
                 self.updateInteractiveTransition(animationRatio)
             case .Ended, .Cancelled, .Failed:
                 self.handIn = false
-                if velocity > 0 {
+                if velocity.x > 0 {
                     finishInteractiveTransition()
                 } else {
                     cancelInteractiveTransition()
@@ -79,7 +85,7 @@ public class WYInteractiveTransitions: UIPercentDrivenInteractiveTransition, UIV
             let isCancelled = transitionContext.transitionWasCancelled()
             transitionContext.completeTransition(!isCancelled)
         }
-
+        
         switch transitionType {
         case WYTransitoinType.Push:
             let moveToLeft = CGAffineTransformMakeTranslation(-container.frame.width, 0)
@@ -87,13 +93,12 @@ public class WYInteractiveTransitions: UIPercentDrivenInteractiveTransition, UIV
             toView.transform = self.presenting ? moveToRight : moveToLeft
             container.addSubview(toView)
             container.addSubview(fromView)
-            UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.7, options: UIViewAnimationOptions.CurveEaseIn, animations: { () -> Void in
+            UIView.animateWithDuration(0.5, animations: {
                 fromView.transform = self.presenting ? moveToLeft : moveToRight
                 toView.transform = CGAffineTransformIdentity
-                }) { (finished) -> Void in
+                }, completion: { (finished) in
                     completeTransition()
-            }
-            
+            })
         case WYTransitoinType.Up:
             if presenting {
                 toView.frame = container.bounds
@@ -165,7 +170,7 @@ public class WYInteractiveTransitions: UIPercentDrivenInteractiveTransition, UIV
             container.addSubview(toView)
             container.addSubview(fromView)
             let duration = self.transitionDuration(transitionContext)
-            UIView.animateWithDuration(duration, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.7, options: [], animations: {
+            UIView.animateWithDuration(duration, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: [], animations: {
                 fromView.transform = self.presenting ? offScreenLeft : offScreenRight
                 toView.transform = CGAffineTransformIdentity
                 }, completion: { finished in
@@ -213,6 +218,88 @@ public class WYInteractiveTransitions: UIPercentDrivenInteractiveTransition, UIV
                         fromView.removeFromSuperview()
                 })
             }
+            
+        case WYTransitoinType.HalfRotation:
+            
+            if presenting {
+                toView.frame = container.bounds
+                
+                
+                container.addSubview(fromView)
+                container.addSubview(toView)
+                
+                UIView.animateWithDuration(duration, animations: {
+                    toView.transform = CGAffineTransformMakeScale(2, 2)
+                    toView.transform = CGAffineTransformMakeTranslation(-256, -256)
+                    toView.transform = CGAffineTransformMakeRotation(CGFloat(M_PI))
+                    fromView.transform = CGAffineTransformIdentity
+                    
+                    }, completion: { (finished) in
+                        completeTransition()
+                })
+            }
+            else {
+                let transform = toView.transform
+                toView.frame = container.bounds
+                toView.transform = transform
+                
+                container.addSubview(toView)
+                container.addSubview(fromView)
+                
+                UIView.animateWithDuration(duration, animations: {
+                    fromView.transform = CGAffineTransformMakeScale(2, 2)
+                    fromView.transform = CGAffineTransformMakeTranslation(-256, -256)
+                    fromView.transform = CGAffineTransformMakeRotation(CGFloat(M_PI))
+                    fromView.alpha = 0
+                    toView.transform = CGAffineTransformIdentity
+                    
+                    }, completion: { (finished) in
+                        completeTransition()
+                        fromView.removeFromSuperview()
+                })
+            }
+            
+        case WYTransitoinType.NewZoom:
+            
+            if presenting {
+                let snapshotView = toView.resizableSnapshotViewFromRect(toView.frame, afterScreenUpdates: true, withCapInsets: UIEdgeInsetsZero)
+                snapshotView.transform = CGAffineTransformMakeScale(0.1, 0.1)
+                snapshotView.center = fromView.center
+                container.addSubview(snapshotView)
+                
+                toView.alpha = 0.0
+                container.addSubview(toView)
+                
+                UIView.animateWithDuration(duration, delay: 0.0, usingSpringWithDamping: 0.8, initialSpringVelocity: 20.0, options: [],
+                                           animations: { () -> Void in
+                                            snapshotView.transform = CGAffineTransformIdentity
+                    }, completion: { (finished) -> Void in
+                        snapshotView.removeFromSuperview()
+                        toView.alpha = 1.0
+                        transitionContext.completeTransition(finished)
+                })
+            }
+            else {
+                let snapshotView = fromView.resizableSnapshotViewFromRect(fromView.frame, afterScreenUpdates: true, withCapInsets: UIEdgeInsetsZero)
+                snapshotView.center = toView.center
+                container.addSubview(snapshotView)
+                
+                fromView.alpha = 0.0
+                
+                let toViewControllerSnapshotView = toView.resizableSnapshotViewFromRect(toView.frame, afterScreenUpdates: true, withCapInsets: UIEdgeInsetsZero)
+                container.insertSubview(toViewControllerSnapshotView, belowSubview: snapshotView)
+                
+                UIView.animateWithDuration(duration, animations: { () -> Void in
+                    snapshotView.transform = CGAffineTransformMakeScale(0.1, 0.1)
+                    snapshotView.alpha = 0.0
+                }) { (finished) -> Void in
+                    toViewControllerSnapshotView.removeFromSuperview()
+                    snapshotView.removeFromSuperview()
+                    fromView.removeFromSuperview()
+                    transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
+                }
+            }
+            
         }
     }
     

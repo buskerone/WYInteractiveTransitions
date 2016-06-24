@@ -14,6 +14,8 @@ public enum WYTransitoinType {
     case Up
     case Swing
     case ScaleAndRotate
+    case HalfRotation
+    case NewZoom
 }
 
 public class WYInteractiveTransitions: UIPercentDrivenInteractiveTransition, UIViewControllerAnimatedTransitioning, UIViewControllerTransitioningDelegate {
@@ -216,6 +218,88 @@ public class WYInteractiveTransitions: UIPercentDrivenInteractiveTransition, UIV
                         fromView.removeFromSuperview()
                 })
             }
+            
+        case WYTransitoinType.HalfRotation:
+                    
+            if presenting {
+                toView.frame = container.bounds
+                
+                
+                container.addSubview(fromView)
+                container.addSubview(toView)
+                
+                UIView.animateWithDuration(duration, animations: {
+                    toView.transform = CGAffineTransformMakeScale(2, 2)
+                    toView.transform = CGAffineTransformMakeTranslation(-256, -256)
+                    toView.transform = CGAffineTransformMakeRotation(CGFloat(M_PI))
+                    fromView.transform = CGAffineTransformIdentity
+                    
+                    }, completion: { (finished) in
+                        completeTransition()
+                })
+            }
+            else {
+                let transform = toView.transform
+                toView.frame = container.bounds
+                toView.transform = transform
+                
+                container.addSubview(toView)
+                container.addSubview(fromView)
+                
+                UIView.animateWithDuration(duration, animations: {
+                    fromView.transform = CGAffineTransformMakeScale(2, 2)
+                    fromView.transform = CGAffineTransformMakeTranslation(-256, -256)
+                    fromView.transform = CGAffineTransformMakeRotation(CGFloat(M_PI))
+                    fromView.alpha = 0
+                    toView.transform = CGAffineTransformIdentity
+                    
+                    }, completion: { (finished) in
+                        completeTransition()
+                        fromView.removeFromSuperview()
+                })
+            }
+            
+        case WYTransitoinType.NewZoom:
+            
+            if presenting {
+                let snapshotView = toView.resizableSnapshotViewFromRect(toView.frame, afterScreenUpdates: true, withCapInsets: UIEdgeInsetsZero)
+                snapshotView.transform = CGAffineTransformMakeScale(0.1, 0.1)
+                snapshotView.center = fromView.center
+                container.addSubview(snapshotView)
+                
+                toView.alpha = 0.0
+                container.addSubview(toView)
+                
+                UIView.animateWithDuration(duration, delay: 0.0, usingSpringWithDamping: 0.8, initialSpringVelocity: 20.0, options: [],
+                                           animations: { () -> Void in
+                                            snapshotView.transform = CGAffineTransformIdentity
+                    }, completion: { (finished) -> Void in
+                        snapshotView.removeFromSuperview()
+                        toView.alpha = 1.0
+                        transitionContext.completeTransition(finished)
+                })
+            }
+            else {
+                let snapshotView = fromView.resizableSnapshotViewFromRect(fromView.frame, afterScreenUpdates: true, withCapInsets: UIEdgeInsetsZero)
+                snapshotView.center = toView.center
+                container.addSubview(snapshotView)
+                
+                fromView.alpha = 0.0
+                
+                let toViewControllerSnapshotView = toView.resizableSnapshotViewFromRect(toView.frame, afterScreenUpdates: true, withCapInsets: UIEdgeInsetsZero)
+                container.insertSubview(toViewControllerSnapshotView, belowSubview: snapshotView)
+                
+                UIView.animateWithDuration(duration, animations: { () -> Void in
+                    snapshotView.transform = CGAffineTransformMakeScale(0.1, 0.1)
+                    snapshotView.alpha = 0.0
+                }) { (finished) -> Void in
+                    toViewControllerSnapshotView.removeFromSuperview()
+                    snapshotView.removeFromSuperview()
+                    fromView.removeFromSuperview()
+                    transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
+                }
+            }
+        
         }
     }
     
